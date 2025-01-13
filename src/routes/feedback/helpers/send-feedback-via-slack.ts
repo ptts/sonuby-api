@@ -1,34 +1,38 @@
-import { FeedbackType, type Feedback } from '../schemas';
+import { sendSlackMessage } from '../../../shared/helpers/send-slack-message';
+import { type Feedback } from '../schemas';
 
-export const sendFeedbackViaSlack = async (feedback: Feedback) => {
-  const slackMessage = {
-    channel: '#sonuby-in-app-feedback',
-    text: `New feedback received:\n\n*Type*: ${feedback.type}`,
+export const sendFeedbackViaSlack = async (
+  feedback: Feedback,
+  { slackWebhookUrl }: { slackWebhookUrl: string },
+): Promise<void> => {
+  const formatMessage = (feedback: Feedback): string => {
+    const category = 'category' in feedback ? feedback.category : undefined;
+    const stackTrace =
+      'stackTrace' in feedback ? (feedback.stackTrace ?? undefined) : undefined;
+    const rating =
+      'rating' in feedback ? (feedback.rating ?? undefined) : undefined;
+
+    return [
+      `New feedback received:`,
+      `*Type*: ${feedback.type}`,
+      `*Name*: ${feedback.name ?? '(Anonymous)'}`,
+      `*Email*: ${feedback.email ?? '(Anonymous)'}`,
+      rating && `*Rating*: ${rating.toString()}`,
+      category && `*Category*: ${category}`,
+      `*OS*: ${feedback.operatingSystem}`,
+      `*Device*: ${feedback.device}`,
+      `*App Version*: ${feedback.appVersion}`,
+      feedback.message && `*Message*: ${feedback.message}`,
+      stackTrace && `*Stack Trace*: \n\`\`\`${stackTrace}\`\`\``,
+    ]
+      .filter(Boolean)
+      .join('\n');
   };
 
-  const { name, email, rating, message } = feedback;
-  const category = 'category' in feedback ? feedback.category : undefined;
+  const messagePayload = {
+    channel: '#sonuby-in-app-feedback',
+    text: formatMessage(feedback),
+  };
 
-  slackMessage.text += `\n*Name*: ${name ?? 'Anonymous'}`;
-  slackMessage.text += `\n*Email*: ${email ?? 'Anonymous'}`;
-  slackMessage.text += `\n*Rating*: ${rating?.toString() ?? '(Not provided)'}`;
-
-  if (category) {
-    slackMessage.text += `\n*Category*: ${category}`;
-  }
-
-  slackMessage.text += `\n*OS*: ${feedback.operatingSystem}`;
-  slackMessage.text += `\n*Device*: ${feedback.device}`;
-  slackMessage.text += `\n*App Version*: ${feedback.appVersion}`;
-
-  if (message) {
-    slackMessage.text += `\n*Message*: ${message}`;
-  }
-
-  if (feedback.type === FeedbackType.Bug) {
-    slackMessage.text += `\n*Stack Trace*: \n\`\`\`${feedback.stackTrace ?? ''}\`\`\``;
-  }
-
-  //TODO: Implement sending the slack message
-  await new Promise((r) => setTimeout(r, 1000));
+  await sendSlackMessage({ messagePayload, slackWebhookUrl });
 };

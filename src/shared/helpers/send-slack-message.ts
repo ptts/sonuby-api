@@ -1,6 +1,6 @@
 import { UserError } from '../user-error';
 
-export const sendToSlack = async ({
+export const sendSlackMessage = async ({
   messagePayload,
   slackWebhookUrl,
 }: {
