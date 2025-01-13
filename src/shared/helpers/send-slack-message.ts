@@ -17,6 +17,7 @@ export const sendSlackMessage = async ({
         'Content-type': 'application/json',
       },
       body: JSON.stringify(messagePayload),
+      signal: AbortSignal.timeout(2000),
     });
 
     if (!response.ok) {

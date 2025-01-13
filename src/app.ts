@@ -10,6 +10,7 @@ import { offersRouter } from './routes/offers/offers.index';
 import { signRouter } from './routes/sign/sign.index';
 import { systemNotificationsRouter } from './routes/system-notifications/system-notifications.index';
 import { createRouter } from './shared/helpers/create-router';
+import { safeSendLogEventToSlack } from './shared/helpers/safe-send-log-event-to-slack';
 import { UserError } from './shared/user-error';
 import type { AppEnv } from './types';
 
@@ -27,29 +28,45 @@ const createApp = () => {
     return c.json({ success: false, error: errorMessage, status }, { status });
   });
 
-  app.onError((error, c) => {
+  app.onError(async (error, c) => {
     c.var.logger.error({
       userId: c.var.firebaseToken?.sub,
+      reqId: c.var.requestId,
       url: c.req.url,
       message: error.message,
       cause: error.cause,
       stack: error.stack,
-      reqId: c.var.requestId,
     });
 
     if (error instanceof UserError) {
+      if (error.loggingDetails) {
+        c.var.logger.error({
+          userId: c.var.firebaseToken?.sub,
+          reqId: c.var.requestId,
+          loggingDetails: error.loggingDetails,
+        });
+
+        await safeSendLogEventToSlack(error.loggingDetails, {
+          slackWebhookUrl: c.env.SLACK_WEBHOOK_URL,
+        });
+      }
+
+      const { status } = error;
       return c.json(
         {
           success: false,
-          error: error.message || getReasonPhrase(error.status),
-          status: error.status,
+          error: error.message || getReasonPhrase(status),
+          status,
         },
-        { status: error.status },
+        { status },
       );
     }
+
     const status = StatusCodes.INTERNAL_SERVER_ERROR;
-    const errorMessage = getReasonPhrase(status);
-    return c.json({ success: false, error: errorMessage, status }, { status });
+    return c.json(
+      { success: false, error: getReasonPhrase(status), status },
+      { status },
+    );
   });
 
   return app;
