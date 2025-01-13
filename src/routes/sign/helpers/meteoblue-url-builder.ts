@@ -71,7 +71,6 @@ export const buildMeteoblueDataPackagesUrlV1 = async ({
       winddirection: units.windDirection,
       history_days: '0',
       forecast_days: '7',
-      apikey: credentials.meteoblueApiKey,
     },
     credentials,
   });
