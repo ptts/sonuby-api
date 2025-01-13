@@ -1,4 +1,4 @@
-import { FeedbackType, type Feedback } from '../schema';
+import { FeedbackType, type Feedback } from '../schemas';
 
 export const sendFeedbackViaSlack = async (feedback: Feedback) => {
   const slackMessage = {

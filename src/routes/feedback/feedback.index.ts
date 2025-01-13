@@ -4,7 +4,7 @@ import { createRouter } from '../../shared/helpers/create-router';
 import { UserError } from '../../shared/user-error';
 import { sendFeedbackViaEmail } from './helpers/send-feedback-via-email';
 import { sendFeedbackViaSlack } from './helpers/send-feedback-via-slack';
-import { FeedbackSchema } from './schema';
+import { FeedbackSchema } from './schemas';
 
 const feedbackRouter = createRouter();
 

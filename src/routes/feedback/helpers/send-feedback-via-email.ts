@@ -1,5 +1,5 @@
 import { UserError } from '../../../shared/user-error';
-import { FeedbackType, type Feedback } from '../schema';
+import { FeedbackType, type Feedback } from '../schemas';
 
 export const getFeedbackSubject = (feedback: Feedback): string => {
   switch (feedback.type) {
