@@ -1,5 +1,5 @@
 {
-  "name": "sonuby-cloud-workers-v2",
+  "name": "sonuby-cloud-worker",
   "type": "module",
   "scripts": {
     "ci": "npm run cf-typegen && npm run test && npm run type-check && npm run lint:fix && npm run format",
