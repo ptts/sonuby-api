@@ -2,7 +2,7 @@ import { zValidator } from '@hono/zod-validator';
 import { z } from 'zod';
 import { firebaseAuthMiddleware } from '../../middlewares/firebase-auth';
 import { createRouter } from '../../shared/helpers/create-router';
-import { ClientEntitlementSchema } from '../../shared/schemas';
+import { ClientEntitlementSchema, SemverSchema } from '../../shared/schemas';
 import { checkOfferEligibility } from './helpers/check-offer-eligibility';
 import { type PromotionalOffer } from './types';
 
@@ -21,7 +21,7 @@ offersRouter.get(
     'query',
     z.object({
       entitlement: ClientEntitlementSchema,
-      app_version: z.string(),
+      app_version: SemverSchema,
     }),
   ),
   (c) => {
