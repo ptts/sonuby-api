@@ -1,9 +1,9 @@
 #:schema node_modules/wrangler/config-schema.json
 
 name = "sonuby-api"
-account_id = "123"
+account_id = "01578ce2909ee748513e84133ee3d0c4"
 workers_dev = false
-main = "src/index.ts"
+main = "./src/index.ts"
 compatibility_date = "2024-12-30"
 compatibility_flags = [ "nodejs_compat" ]
 
@@ -14,32 +14,57 @@ ENVIRONMENT = "development"
 
 [[kv_namespaces]]
 binding = "AUTHENTICATION_KV"
-id = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+id = "ce4d236ec62c44bc896c23e7c05c2f57"
 
 [env.production.vars]
 FIREBASE_PROJECT_ID = "sonuby-production"
 CURRENT_APP_VERSION = "1.7.1"
 ENVIRONMENT = "production"
 
+[env.production]
+kv_namespaces = [
+  { binding = "AUTHENTICATION", id = "ce4d236ec62c44bc896c23e7c05c2f57"}
+]
+
 [env.beta.vars]
 FIREBASE_PROJECT_ID = "sonuby-beta"
 CURRENT_APP_VERSION = "1.7.1"
 ENVIRONMENT = "beta"
+
+[env.beta]
+kv_namespaces = [
+  { binding = "AUTHENTICATION", id = "3c996a8341514ad3b3ac7c5e9df86838"}
+]
 
 [env.staging.vars]
 FIREBASE_PROJECT_ID = "sonuby-staging"
 CURRENT_APP_VERSION = "1.7.1"
 ENVIRONMENT = "staging"
 
+[env.staging]
+kv_namespaces = [
+  { binding = "AUTHENTICATION", id = "da7da843fc754e55910ad39ca28e2a16"}
+]
+
 [env.development.vars]
 FIREBASE_PROJECT_ID = "sonuby-development"
 CURRENT_APP_VERSION = "1.7.1"
 ENVIRONMENT = "development"
 
+[env.development]
+kv_namespaces = [
+  { binding = "AUTHENTICATION", id = "f5262514215849d0a073d2c725b75206", preview_id = "f5262514215849d0a073d2c725b75206"}
+]
+
 [env.testing.vars]
 FIREBASE_PROJECT_ID = "sonuby-development"
 CURRENT_APP_VERSION = "1.7.1"
 ENVIRONMENT = "testing"
+
+[env.testing]
+kv_namespaces = [
+  { binding = "AUTHENTICATION", id = "a42891ddb1774f8897fd6fc730eb0566", preview_id = "f5262514215849d0a073d2c725b75206"}
+]
 
 # Workers Logs
 # Docs: https://developers.cloudflare.com/workers/observability/logs/workers-logs/
