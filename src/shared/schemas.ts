@@ -9,6 +9,7 @@ export const ClientEnvSchema = z.enum([
   'staging',
   'beta',
   'development',
+  'testing',
 ]);
 export type ClientEnv = z.infer<typeof ClientEnvSchema>;
 
