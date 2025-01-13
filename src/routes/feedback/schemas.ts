@@ -6,6 +6,7 @@ export const FeedbackType = {
   Improvement: 'improvement-request',
   Bug: 'bug-report',
 } as const;
+export type FeedbackType = (typeof FeedbackType)[keyof typeof FeedbackType];
 
 const TechnicalInfoSchema = z.object({
   operatingSystem: z.string(),
