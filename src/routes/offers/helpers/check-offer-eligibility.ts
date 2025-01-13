@@ -1,6 +1,10 @@
 import * as semver from 'semver';
 import type { Entitlement, PromotionalOffer } from '../types';
 
+/**
+ * @returns true if the app is within the offer's active period
+ * (validFrom <= now <= validUntil), otherwise false
+ */
 const checkOfferWithinActivePeriod = (offer: PromotionalOffer): boolean => {
   const now = new Date();
   const validFrom = new Date(offer.validFrom);
@@ -8,6 +12,10 @@ const checkOfferWithinActivePeriod = (offer: PromotionalOffer): boolean => {
   return now >= validFrom && now <= validUntil;
 };
 
+/**
+ * @returns true if the client version is greater than or equal
+ * to the minRequiredVersion, otherwise false
+ */
 const checkVersionSufficient = ({
   clientVersion,
   minRequiredVersion,
@@ -22,10 +30,16 @@ const checkVersionSufficient = ({
   return semver.gte(clientVersion, minRequiredVersion);
 };
 
+/**
+ *
+ * @returns true if the client is eligible for the offer, otherwise false
+ */
 export const checkOfferEligibility = (
   offer: PromotionalOffer,
-  { entitlement, appVersion }: { entitlement: Entitlement; appVersion: string },
+  client: { entitlement: Entitlement; appVersion: string },
 ) => {
+  const { entitlement, appVersion } = client;
+
   const isOfferActive = checkOfferWithinActivePeriod(offer);
   if (!isOfferActive) return false;
 
