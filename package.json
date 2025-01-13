@@ -7,7 +7,7 @@
     "deploy": "wrangler deploy --minify",
     "dev": "wrangler dev --env development",
     "format": "prettier --write \"**/*.{js,cjs,mjs,ts,tsx,md,json,yml,yaml}\"",
-    "lint:fix": "npm run lint --fix",
+    "lint:fix": "eslint --fix",
     "lint": "eslint",
     "pre-commit": "npm run cf-typegen && npm run test && npm run type-check && npm run lint:fix && npm run format",
     "test": "vitest run",
