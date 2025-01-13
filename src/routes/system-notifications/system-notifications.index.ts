@@ -4,13 +4,13 @@ import { z } from 'zod';
 import { firebaseAuthMiddleware } from '../../middlewares/firebase-auth';
 import { createRouter } from '../../shared/helpers/create-router';
 
-const systemNotificationsRouter = createRouter();
-
 const SemverSchema = z
   .string()
   .refine((value) => semver.valid(value) !== null, {
     message: 'Invalid version format',
   });
+
+const systemNotificationsRouter = createRouter();
 
 systemNotificationsRouter.get(
   '/v1/system_notifications',
@@ -25,6 +25,7 @@ systemNotificationsRouter.get(
   ),
   (c) => {
     const { app_version: clientVersion } = c.req.valid('query');
+
     const isUpdateAvailable = semver.lt(
       c.env.CURRENT_APP_VERSION,
       clientVersion,
