@@ -3,14 +3,20 @@ import { z } from 'zod';
 import { firebaseAuthMiddleware } from '../../middlewares/firebase-auth';
 import { createRouter } from '../../shared/helpers/create-router';
 
-const inAppEventsRouter = createRouter();
-
 type InAppEvent = {
   type: 'event';
   url: string;
 };
 
 type InAppEventResponse = InAppEvent | { type: 'unknown' };
+
+const eventIdToEventMap: Partial<Record<string, InAppEvent>> = {
+  /**
+   * Add events here
+   */
+} as const;
+
+const inAppEventsRouter = createRouter();
 
 inAppEventsRouter.get(
   '/v1/in_app_events/:eventId',
@@ -24,12 +30,7 @@ inAppEventsRouter.get(
     const { eventId } = c.req.valid('param');
     const { platform: _platform } = c.req.valid('query');
 
-    const event = (
-      {
-        /** Add events here */
-      } as const satisfies Record<string, InAppEvent>
-    )[eventId];
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    const event = eventIdToEventMap[eventId];
     if (event) {
       return c.json(event);
     }
