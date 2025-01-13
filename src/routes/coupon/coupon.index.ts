@@ -2,6 +2,7 @@ import { zValidator } from '@hono/zod-validator';
 import { z } from 'zod';
 import { firebaseAuthMiddleware } from '../../middlewares/firebase-auth';
 import { createRouter } from '../../shared/helpers/create-router';
+import { ClientEnvSchema, ClientPlatformSchema } from '../../shared/schemas';
 import { UserError } from '../../shared/user-error';
 
 const couponRouter = createRouter();
@@ -41,13 +42,8 @@ couponRouter.get(
   zValidator(
     'query',
     z.object({
-      platform: z.union([z.literal('ios'), z.literal('android')]),
-      client_env: z.union([
-        z.literal('production'),
-        z.literal('staging'),
-        z.literal('beta'),
-        z.literal('development'),
-      ]),
+      platform: ClientPlatformSchema,
+      client_env: ClientEnvSchema,
     }),
   ),
   (c) => {
