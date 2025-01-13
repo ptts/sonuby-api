@@ -27,7 +27,7 @@ offersRouter.get(
   (c) => {
     const { entitlement, app_version: appVersion } = c.req.valid('query');
 
-    const offers: PromotionalOffer[] = availableOffers.filter((offer) =>
+    const offers = availableOffers.filter((offer) =>
       checkOfferEligibility(offer, {
         entitlement,
         appVersion,
