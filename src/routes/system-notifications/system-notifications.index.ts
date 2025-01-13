@@ -3,7 +3,11 @@ import * as semver from 'semver';
 import { z } from 'zod';
 import { firebaseAuthMiddleware } from '../../middlewares/firebase-auth';
 import { createRouter } from '../../shared/helpers/create-router';
-import { SemverSchema } from '../../shared/schemas';
+import {
+  ClientEnvSchema,
+  ClientPlatformSchema,
+  SemverSchema,
+} from '../../shared/schemas';
 
 const systemNotificationsRouter = createRouter();
 
@@ -13,8 +17,8 @@ systemNotificationsRouter.get(
   zValidator(
     'query',
     z.object({
-      platform: z.string(),
-      client_env: z.string(),
+      platform: ClientPlatformSchema,
+      client_env: ClientEnvSchema,
       app_version: SemverSchema,
     }),
   ),
