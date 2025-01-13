@@ -56,6 +56,7 @@ export default tseslint.config(
             'Avoid logging using console.log. Use `c.var.logger` instead and log an object.',
         },
       ],
+      'func-style': ['error', 'expression'],
     },
   },
 );
