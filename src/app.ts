@@ -13,7 +13,7 @@ import { createRouter } from './shared/helpers/create-router';
 import { UserError } from './shared/user-error';
 import type { AppEnv } from './types';
 
-function createApp() {
+const createApp = () => {
   const app = createRouter();
 
   /** Middlewares */
@@ -53,7 +53,7 @@ function createApp() {
   });
 
   return app;
-}
+};
 
 const app = createApp();
 
