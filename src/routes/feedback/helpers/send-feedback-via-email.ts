@@ -1,22 +1,22 @@
-import { UserError } from '../../../shared/user-error'
-import { FeedbackType, type Feedback } from '../schema'
+import { UserError } from '../../../shared/user-error';
+import { FeedbackType, type Feedback } from '../schema';
 
 export const getFeedbackSubject = (feedback: Feedback): string => {
   switch (feedback.type) {
     case FeedbackType.Praise:
-      return `🙏 New Praise`
+      return `🙏 New Praise`;
     case FeedbackType.Improvement:
-      return `🔧 New Improvement Request`
+      return `🔧 New Improvement Request`;
     case FeedbackType.Feature:
-      return `🥠 New Feature Request`
+      return `🥠 New Feature Request`;
     case FeedbackType.Bug:
-      return `🐞 New Bug Report`
+      return `🐞 New Bug Report`;
     default: {
-      feedback satisfies never
-      return '🤷‍♂️ New Feedback'
+      feedback satisfies never;
+      return '🤷‍♂️ New Feedback';
     }
   }
-}
+};
 
 export const getBrevoParamsFromFeedback = (feedback: Feedback) => {
   const params = {
@@ -35,28 +35,28 @@ export const getBrevoParamsFromFeedback = (feedback: Feedback) => {
     appVersion: feedback.appVersion,
     rating: 'rating' in feedback ? (feedback.rating ?? undefined) : undefined,
     paymentProviderUserId: feedback.paymentProviderUserId,
-  } as const satisfies Record<string, string | number | undefined | null>
+  } as const satisfies Record<string, string | number | undefined | null>;
 
   if (feedback.type === FeedbackType.Bug) {
-    return { ...params, stackTrace: feedback.stackTrace } as const
+    return { ...params, stackTrace: feedback.stackTrace } as const;
   }
 
-  return params
-}
+  return params;
+};
 
 export const sendFeedbackViaEmail = async (
   feedback: Feedback,
   {
     brevoApiKey,
   }: {
-    brevoApiKey: string
+    brevoApiKey: string;
   },
 ) => {
   try {
-    const params = getBrevoParamsFromFeedback(feedback)
-    const subject = getFeedbackSubject(feedback)
-    const { name, email } = feedback
-    const replyTo = email && name ? { email, name } : null
+    const params = getBrevoParamsFromFeedback(feedback);
+    const subject = getFeedbackSubject(feedback);
+    const { name, email } = feedback;
+    const replyTo = email && name ? { email, name } : null;
 
     const payload = {
       sender: {
@@ -73,7 +73,7 @@ export const sendFeedbackViaEmail = async (
       replyTo,
       templateId: 6,
       params,
-    }
+    };
 
     const response = await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
@@ -83,12 +83,12 @@ export const sendFeedbackViaEmail = async (
         'api-key': brevoApiKey,
       },
       body: JSON.stringify(payload),
-    })
+    });
 
     if (!response.ok || response.status !== 201) {
       throw new Error(
         `${response.statusText}: ${await response.text()} (${response.status.toString()})`,
-      )
+      );
     }
   } catch (error) {
     throw new UserError({
@@ -99,6 +99,6 @@ export const sendFeedbackViaEmail = async (
         title: 'Failed to send feedback via email',
         value: String(error),
       },
-    })
+    });
   }
-}
+};
