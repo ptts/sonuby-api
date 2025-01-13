@@ -15,20 +15,31 @@ feedbackRouter.post(
   async (c) => {
     const feedback = c.req.valid('json');
 
+    let emailError: unknown;
     try {
       await sendFeedbackViaEmail(feedback, {
         brevoApiKey: c.env.BREVO_API_KEY,
       });
-    } catch (emailError) {
+    } catch (error) {
+      emailError = error;
+    }
+
+    let slackError: unknown;
+    if (emailError) {
       try {
         await sendFeedbackViaSlack(feedback);
-      } catch (slackError) {
-        throw new UserError({
-          message: 'Feedback not received',
-          status: 500,
-          cause: [emailError, slackError],
-        });
+      } catch (error) {
+        slackError = error;
       }
+    }
+
+    const success = !emailError && !slackError;
+    if (!success) {
+      throw new UserError({
+        status: 500,
+        message: 'Failed to send feedback',
+        cause: { emailError, slackError },
+      });
     }
 
     return c.json({ message: 'Feedback received' });
