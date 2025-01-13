@@ -56,7 +56,6 @@ const createApp = () => {
 };
 
 const app = createApp();
-
 const routes = [
   couponRouter,
   credentialsRouter,
@@ -66,7 +65,6 @@ const routes = [
   signRouter,
   systemNotificationsRouter,
 ] as const;
-
 for (const route of routes) {
   app.route('/', route);
 }
