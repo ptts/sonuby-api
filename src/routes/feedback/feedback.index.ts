@@ -27,7 +27,9 @@ feedbackRouter.post(
     let slackError: unknown;
     if (emailError) {
       try {
-        await sendFeedbackViaSlack(feedback);
+        await sendFeedbackViaSlack(feedback, {
+          slackWebhookUrl: c.env.SLACK_WEBHOOK_URL,
+        });
       } catch (error) {
         slackError = error;
       }

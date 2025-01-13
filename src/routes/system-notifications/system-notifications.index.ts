@@ -3,12 +3,7 @@ import * as semver from 'semver';
 import { z } from 'zod';
 import { firebaseAuthMiddleware } from '../../middlewares/firebase-auth';
 import { createRouter } from '../../shared/helpers/create-router';
-
-const SemverSchema = z
-  .string()
-  .refine((value) => semver.valid(value) !== null, {
-    message: 'Invalid version format',
-  });
+import { SemverSchema } from '../../shared/schemas';
 
 const systemNotificationsRouter = createRouter();
 

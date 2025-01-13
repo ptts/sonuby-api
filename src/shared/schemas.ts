@@ -1,3 +1,4 @@
+import * as semver from 'semver';
 import { z } from 'zod';
 
 /**
@@ -19,3 +20,9 @@ export type ClientPlatform = z.infer<typeof ClientPlatformSchema>;
 
 export const ClientEntitlementSchema = z.enum(['free', 'enthusiast']);
 export type ClientEntitlement = z.infer<typeof ClientEntitlementSchema>;
+
+export const SemverSchema = z
+  .string()
+  .refine((value) => semver.valid(value) !== null, {
+    message: 'Invalid version format',
+  });
