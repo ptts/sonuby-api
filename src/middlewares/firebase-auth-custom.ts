@@ -25,7 +25,7 @@ export const verifyFirebaseRequest = async ({
   jwks: GoogleJSONWebKeySet;
 }) => {
   const authorizationHeader = request.headers.get('Authorization');
-  const jwt = authorizationHeader?.replace(/Bearer\s+/i, '') ?? null;
+  const jwt = authorizationHeader?.replace(/Bearer\s+/i, '') ?? undefined;
 
   if (!jwt) {
     throw new UserError({
@@ -81,9 +81,9 @@ export const getRemoteGoogleJwks = async () => {
   const data = await response.json<GoogleJSONWebKeySet>();
   const cacheControlHeader = response.headers.get('Cache-Control');
   const maxAgeMatch = cacheControlHeader?.match(/max-age=(\d+)/);
-  const maxAge = maxAgeMatch ? parseInt(maxAgeMatch[1], 10) : null;
+  const maxAge = maxAgeMatch ? Number.parseInt(maxAgeMatch[1], 10) : undefined;
 
-  if (maxAge === null || isNaN(maxAge)) {
+  if (maxAge === undefined || Number.isNaN(maxAge)) {
     throw new Error('Invalid or missing Cache-Control max-age');
   }
 

@@ -20,15 +20,18 @@ credentialsRouter.get(
     const { id } = c.req.valid('param');
 
     switch (id) {
-      case CredentialType.WeatherMaps:
+      case CredentialType.WeatherMaps: {
         return c.json({ mapsKey: c.env.METEOBLUE_MAPS_API_KEY });
-      case CredentialType.MareaTidesApi:
+      }
+      case CredentialType.MareaTidesApi: {
         return c.json({ mareaTidesKey: c.env.MAREA_TIDES_API_KEY });
-      default:
+      }
+      default: {
         id satisfies never;
         throw new UserError({
           status: 400,
         });
+      }
     }
   },
 );

@@ -22,7 +22,7 @@ describe('signMeteoblueUrl', () => {
       expireInMinutes,
     });
 
-    const expiresParam = parseInt(
+    const expiresParam = Number.parseInt(
       new URL(signedUrl).searchParams.get('expires') ?? '',
       10,
     );

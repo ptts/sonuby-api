@@ -30,7 +30,7 @@ export const signMeteoblueUrl = async ({
     key,
     encoder.encode(dataToSign),
   );
-  const hexEncodedSignature = Array.from(new Uint8Array(signature))
+  const hexEncodedSignature = [...new Uint8Array(signature)]
     .map((b) => b.toString(16).padStart(2, '0'))
     .join('');
 

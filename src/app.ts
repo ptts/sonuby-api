@@ -66,9 +66,10 @@ const routes = [
   signRouter,
   systemNotificationsRouter,
 ] as const;
-routes.forEach((route) => {
+
+for (const route of routes) {
   app.route('/', route);
-});
+}
 
 export type AppContext = Context<AppEnv>;
 export { app };

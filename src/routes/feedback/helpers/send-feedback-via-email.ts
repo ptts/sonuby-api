@@ -3,14 +3,18 @@ import { FeedbackType, type Feedback } from '../schemas';
 
 export const getFeedbackSubject = (feedback: Feedback): string => {
   switch (feedback.type) {
-    case FeedbackType.Praise:
+    case FeedbackType.Praise: {
       return `🙏 New Praise`;
-    case FeedbackType.Improvement:
+    }
+    case FeedbackType.Improvement: {
       return `🔧 New Improvement Request`;
-    case FeedbackType.Feature:
+    }
+    case FeedbackType.Feature: {
       return `🥠 New Feature Request`;
-    case FeedbackType.Bug:
+    }
+    case FeedbackType.Bug: {
       return `🐞 New Bug Report`;
+    }
     default: {
       feedback satisfies never;
       return '🤷‍♂️ New Feedback';
@@ -56,7 +60,7 @@ export const sendFeedbackViaEmail = async (
     const params = getBrevoParamsFromFeedback(feedback);
     const subject = getFeedbackSubject(feedback);
     const { name, email } = feedback;
-    const replyTo = email && name ? { email, name } : null;
+    const replyTo = email && name ? { email, name } : undefined;
 
     const payload = {
       sender: {
