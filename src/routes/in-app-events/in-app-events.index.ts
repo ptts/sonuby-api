@@ -2,6 +2,7 @@ import { zValidator } from '@hono/zod-validator';
 import { z } from 'zod';
 import { firebaseAuthMiddleware } from '../../middlewares/firebase-auth';
 import { createRouter } from '../../shared/helpers/create-router';
+import { ClientPlatformSchema } from '../../shared/schemas';
 
 type InAppEvent = {
   type: 'event';
@@ -22,20 +23,17 @@ inAppEventsRouter.get(
   '/v1/in_app_events/:eventId',
   firebaseAuthMiddleware,
   zValidator('param', z.object({ eventId: z.string() })),
-  zValidator(
-    'query',
-    z.object({ platform: z.union([z.literal('ios'), z.literal('android')]) }),
-  ),
+  zValidator('query', z.object({ platform: ClientPlatformSchema })),
   (c) => {
     const { eventId } = c.req.valid('param');
     const { platform: _platform } = c.req.valid('query');
 
     const event = eventIdToEventMap[eventId];
-    if (event) {
-      return c.json(event);
+    if (!event) {
+      return c.json({ type: 'unknown' } satisfies InAppEventResponse);
     }
 
-    return c.json({ type: 'unknown' } satisfies InAppEventResponse);
+    return c.json(event satisfies InAppEventResponse);
   },
 );
 
