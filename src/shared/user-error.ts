@@ -6,13 +6,13 @@ export type LogEvent = {
 };
 
 export class UserError extends Error {
-  cause?: unknown;
   status: ContentfulStatusCode;
   loggingDetails?: LogEvent;
+  cause?: unknown;
 
   constructor(opts: {
-    message?: string;
     status: ContentfulStatusCode;
+    message?: string;
     loggingDetails?: LogEvent;
     cause?: unknown;
   }) {
