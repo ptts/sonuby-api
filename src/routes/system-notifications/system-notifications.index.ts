@@ -25,7 +25,7 @@ systemNotificationsRouter.get(
   (c) => {
     const { app_version: clientVersion } = c.req.valid('query');
 
-    const isUpdateAvailable = semver.lt(
+    const isUpdateAvailable = semver.gt(
       c.env.CURRENT_APP_VERSION,
       clientVersion,
     );
@@ -34,7 +34,7 @@ systemNotificationsRouter.get(
 
     return c.json({
       update: {
-        current_app_version: clientVersion,
+        current_app_version: c.env.CURRENT_APP_VERSION,
         available: isUpdateAvailable,
         required: isUpdateRequired,
         show_app_store_link: c.env.ENVIRONMENT === 'production',
