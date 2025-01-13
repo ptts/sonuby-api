@@ -17,7 +17,6 @@ const offersRouter = createRouter();
 offersRouter.get(
   '/v1/offers',
   firebaseAuthMiddleware,
-  zValidator('json', z.object({ test: z.string() })),
   zValidator(
     'query',
     z.object({
