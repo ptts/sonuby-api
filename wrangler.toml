@@ -1,6 +1,6 @@
 #:schema node_modules/wrangler/config-schema.json
 
-name = "sonuby-cloud-workers"
+name = "sonuby-api"
 account_id = "123"
 workers_dev = false
 main = "src/index.ts"
