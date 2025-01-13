@@ -1,12 +1,10 @@
-import { z } from 'zod';
+import type { ClientEntitlement } from '../../shared/schemas';
 
-export const Entitlement = z.enum(['free', 'enthusiast']);
-export type Entitlement = z.infer<typeof Entitlement>;
 export type PromotionalOffer = {
   id: string;
   paywallId: string;
   validFrom: string;
   validUntil: string;
-  visibleFor: Entitlement[];
+  visibleFor: ClientEntitlement[];
   minVersion: string;
 };

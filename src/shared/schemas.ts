@@ -16,3 +16,6 @@ export const ClientPlatformSchema = z.union([
   z.literal('android'),
 ]);
 export type ClientPlatform = z.infer<typeof ClientPlatformSchema>;
+
+export const ClientEntitlementSchema = z.enum(['free', 'enthusiast']);
+export type ClientEntitlement = z.infer<typeof ClientEntitlementSchema>;

@@ -1,5 +1,6 @@
 import * as semver from 'semver';
-import type { Entitlement, PromotionalOffer } from '../types';
+import type { ClientEntitlement } from '../../../shared/schemas';
+import { type PromotionalOffer } from '../types';
 
 /**
  * @returns true if the app is within the offer's active period
@@ -36,7 +37,7 @@ const checkVersionSufficient = ({
  */
 export const checkOfferEligibility = (
   offer: PromotionalOffer,
-  client: { entitlement: Entitlement; appVersion: string },
+  client: { entitlement: ClientEntitlement; appVersion: string },
 ) => {
   const { entitlement, appVersion } = client;
 

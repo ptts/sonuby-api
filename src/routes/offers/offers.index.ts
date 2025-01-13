@@ -2,13 +2,15 @@ import { zValidator } from '@hono/zod-validator';
 import { z } from 'zod';
 import { firebaseAuthMiddleware } from '../../middlewares/firebase-auth';
 import { createRouter } from '../../shared/helpers/create-router';
+import { ClientEntitlementSchema } from '../../shared/schemas';
 import { checkOfferEligibility } from './helpers/check-offer-eligibility';
-import { Entitlement, type PromotionalOffer } from './types';
+import { type PromotionalOffer } from './types';
 
-/**
- * Current available offers
- */
-const availableOffers: PromotionalOffer[] = [];
+const availableOffers: PromotionalOffer[] = [
+  /**
+   * Current available offers
+   */
+];
 
 const offersRouter = createRouter();
 
@@ -19,7 +21,7 @@ offersRouter.get(
   zValidator(
     'query',
     z.object({
-      entitlement: Entitlement,
+      entitlement: ClientEntitlementSchema,
       app_version: z.string(),
     }),
   ),
