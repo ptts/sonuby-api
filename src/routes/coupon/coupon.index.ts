@@ -19,7 +19,10 @@ couponRouter.get('/v1/store/coupon/:coupon', firebaseAuthMiddleware, (c) => {
 
   const coupon = c.req.param('coupon');
   if (!coupon || !Object.keys(allowedCouponsWithStorefront).includes(coupon)) {
-    throw new UserError({ status: 400 });
+    throw new UserError({
+      status: 400,
+      message: 'Invalid coupon',
+    });
   }
 
   const storefrontId = allowedCouponsWithStorefront[coupon];
@@ -38,7 +41,7 @@ const V15Codes = {
 couponRouter.get(
   '/v1.5/store/coupon/:coupon',
   firebaseAuthMiddleware,
-  zValidator('param', z.object({ coupon: z.nativeEnum(V15Codes) })),
+  zValidator('param', z.object({ coupon: z.string() })),
   zValidator(
     'query',
     z.object({
@@ -47,8 +50,19 @@ couponRouter.get(
     }),
   ),
   (c) => {
-    const { coupon } = c.req.valid('param');
     const { platform, client_env: clientEnv } = c.req.valid('query');
+
+    /** Parsing here, to not expose available coupons in the error response */
+    const { success, data: coupon } = z
+      .nativeEnum(V15Codes)
+      .safeParse(c.req.valid('param'));
+
+    if (!success) {
+      throw new UserError({
+        status: 400,
+        message: 'Invalid coupon',
+      });
+    }
 
     if (coupon === V15Codes.AUSTN808 && platform === 'android') {
       const subscriptionOfferId = 'enthusiast-monthly-austn808';
