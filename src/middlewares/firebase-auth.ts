@@ -22,9 +22,9 @@ export const firebaseAuthMiddleware = createMiddleware<
   }
 >(async (c, next) => {
   if (c.env.ENVIRONMENT === 'development') {
-    c.var.logger.info(
-      'Running in development mode, skipping Firebase authentication',
-    );
+    c.var.logger.info({
+      message: 'Running in development mode, skipping Firebase authentication',
+    });
 
     const TEST_USER_ID = 'dev-user-12345';
     const now = Math.floor(Date.now() / 1000);
